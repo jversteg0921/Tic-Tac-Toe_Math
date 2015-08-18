@@ -24,10 +24,10 @@ public class MainActivity extends AppCompatActivity {
     int x;
     int y;
     String[] funcs = {"+", "-", "*", "/"};
-    private Button submitBtn;
-    private TextView resultText;
-    private TextView questionText;
-    private boolean correct = false;
+    Button submitBtn;
+    TextView resultText;
+    TextView questionText;
+    boolean correct = false;
     private int ans;
     private View v;
     private int questionsRight = 0;
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     //Action when reset is clicked which clears the screen and the virtual game board
     public void resetClick(View v){
         clear();
-        if(aiMark == "X") getAIMove(board);
+        if(aiMark.equals("X")) getAIMove(board);
     }
 
     //Action for when a cell is clicked. Determines which cell has been clicked and
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         TextView cell = (TextView) findViewById(v.getId());
         //Check the content and make sure the cell is empty and that the game isn't over
         String content = (String) cell.getText();
-        if(content == "" && !isOver) {
+        if(content.equals("") && !isOver) {
 
             int function = rnd.nextInt(4);
             if(function == 0){
@@ -88,17 +88,17 @@ public class MainActivity extends AppCompatActivity {
                 y = rnd.nextInt(49) + 1;
             }
             else if(function == 2){
-                x = rnd.nextInt(19) + 1;
-                y = rnd.nextInt(19) + 1;
+                x = rnd.nextInt(24) + 1;
+                y = rnd.nextInt(9) + 1;
             }
             else{
-                x = rnd.nextInt(19) + 1;
+                x = rnd.nextInt(49) + 1;
                 y = rnd.nextInt(19) + 1;
             }
 
             if(function == 3) {
                 while (x % y != 0) {
-                    y = rnd.nextInt(100);
+                    y = rnd.nextInt(14) + 1;
                 }
             }
 
@@ -187,21 +187,23 @@ public class MainActivity extends AppCompatActivity {
                 isOver = checkEnd(mark);
 
                 //if the game isn't over, get the AI's move
-                if (!isOver)
+                if (!isOver) {
                     questionsRight++;
-                if(questionsRight > 3){
-                    questionsRight = 1;
-                }
-                else if(questionsRight < 3) {
+                    if (questionsRight == 3) {
+                        Toast.makeText(this, "3 questions in a row, have another go!", Toast.LENGTH_LONG).show();
+                        questionsRight = 0;
+                    }
+                    else if(questionsRight > 3){
+                        questionsRight = 0;
+                    }
+                    else if(questionsRight < 3) {
                         getAIMove(board);
                     }
+                }
 
             }
             else{
-                if(questionsRight > 0)
-                {
-                    questionsRight--;
-                }
+                questionsRight=0;
                 getAIMove(board);
             }
 
@@ -238,12 +240,14 @@ public class MainActivity extends AppCompatActivity {
         //checks the virtual board for a winner if there's a winner announce it with provided player
         if(board.isWinner()){
             announce(true, player);
+            questionsRight=0;
             return true;
         }
 
         //Check to see if we've reached our move total meaning it's a draw
         else if(moveCount >= 9){
             announce(false, player);
+            questionsRight=0;
             return true;
         }
 
@@ -256,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
     private void announce(boolean endState, String player){
         //Check if it's a win or a draw. If it's a win, amend player with wins!
         //If it's a lose, replace player with "It's a draw"
-        if(endState == true)
+        if(endState)
             player = player + " wins!";
 
         else
