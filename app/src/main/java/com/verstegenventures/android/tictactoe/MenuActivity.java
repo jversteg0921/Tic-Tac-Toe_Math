@@ -14,6 +14,7 @@ public class MenuActivity extends Activity{
 
     Button playBtn;
     Button aboutBtn;
+    Button highScores;
     Button exitBtn;
 
     @Override
@@ -25,6 +26,7 @@ public class MenuActivity extends Activity{
         playBtn = (Button) findViewById(R.id.playButton);
         aboutBtn = (Button) findViewById(R.id.aboutButton);
         exitBtn = (Button) findViewById(R.id.exit);
+        highScores = (Button) findViewById(R.id.highScores);
 
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +43,15 @@ public class MenuActivity extends Activity{
                 Intent aboutIntent = new Intent(MenuActivity.this, AboutActivity.class);
                 startActivity(aboutIntent);
 
+            }
+        });
+
+        highScores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Go to High Scores Activity
+                //Intent highScoresIntent = new Intent(MenuActivity.this, HighScoresActivity.class);
+                //startActivity(highScoresIntent);
             }
         });
 

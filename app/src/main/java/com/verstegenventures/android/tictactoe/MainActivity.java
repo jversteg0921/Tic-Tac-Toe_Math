@@ -93,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 x = rnd.nextInt(49) + 1;
-                y = rnd.nextInt(19) + 1;
+                y = rnd.nextInt(24) + 1;
             }
 
             if(function == 3) {
-                while (x % y != 0) {
+                while ((x % y) != 0) {
                     y = rnd.nextInt(14) + 1;
                 }
             }

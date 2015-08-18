@@ -3,23 +3,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/menuBackgroundBlue">
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
-        android:textSize="60sp"
         android:gravity="center"
-        android:textStyle="italic"
-        android:textColor="@android:color/holo_red_light"/>
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="60sp"
+        android:textStyle="italic"/>
+
+
+
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_centerInParent="true"
+    android:id="@+id/centerLayout">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:text="X"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="60sp"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:id="@+id/buttonsLayout"
-        android:layout_centerInParent="true">
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/playButton"
@@ -31,10 +51,18 @@
 
         <Button
             android:id="@+id/aboutButton"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="About the Game"
+            />
+
+        <Button
+            android:id="@+id/highScores"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="High Scores"
             />
 
         <Button
@@ -46,15 +74,27 @@
             />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+
+        android:text="O"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="60sp"/>
+</LinearLayout>
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/centerLayout"
         android:layout_marginTop="50dp"
-        android:text="Play - Learn - Win!"
-        android:layout_below="@id/buttonsLayout"
-        android:textSize="45sp"
         android:gravity="center"
-        android:textStyle="italic"
-        android:textColor="@android:color/white"/>
+        android:text="Play - Learn - Win!"
+        android:textColor="@android:color/white"
+        android:textSize="45sp"
+        android:textStyle="italic"/>
 
 </RelativeLayout>
