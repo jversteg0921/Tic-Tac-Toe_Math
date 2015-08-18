@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="questionBlue" type="color">#0066ff</item>
+    <item name="menuBackgroundBlue" type="color">#003366</item>
+    <item name="aboutBackgroundBlue" type="color">#66ccff</item>
 </resources>

@@ -14,18 +14,16 @@ public class SplashActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash);
 
-        new CountDownTimer(2000, 1000){
+        new CountDownTimer(1000, 1000){
             public void onTick(long millisUntilFinished){
                 //do nothing
             }
             public void onFinish(){
                 //Use This code eventually once the menu is built
-                //Intent menuIntent = new Intent(SplashActivity.this, MenuActivity.class);
-                //startActivity(menuIntent);
-
-                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(mainIntent);
+                Intent menuIntent = new Intent(SplashActivity.this, MenuActivity.class);
+                startActivity(menuIntent);
                 finish();
+
             }
         }.start();
 

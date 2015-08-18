@@ -80,20 +80,20 @@ public class MainActivity extends AppCompatActivity {
 
             int function = rnd.nextInt(4);
             if(function == 0){
-                x = rnd.nextInt(100);
-                y = rnd.nextInt(100);
+                x = rnd.nextInt(49) + 1;
+                y = rnd.nextInt(49) + 1;
             }
             else if(function == 1){
-                x = rnd.nextInt(100);
-                y = rnd.nextInt(100);
+                x = rnd.nextInt(49) + 1;
+                y = rnd.nextInt(49) + 1;
             }
             else if(function == 2){
-                x = rnd.nextInt(50);
-                y = rnd.nextInt(50);
+                x = rnd.nextInt(19) + 1;
+                y = rnd.nextInt(19) + 1;
             }
             else{
-                x = rnd.nextInt(50);
-                y = rnd.nextInt(50);
+                x = rnd.nextInt(19) + 1;
+                y = rnd.nextInt(19) + 1;
             }
 
             if(function == 3) {
@@ -189,7 +189,10 @@ public class MainActivity extends AppCompatActivity {
                 //if the game isn't over, get the AI's move
                 if (!isOver)
                     questionsRight++;
-                    if(questionsRight < 3) {
+                if(questionsRight > 3){
+                    questionsRight = 1;
+                }
+                else if(questionsRight < 3) {
                         getAIMove(board);
                     }
 

@@ -8,4 +8,6 @@
     <string name="title_activity_splash">SplashActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="aboutGame">This is a simple Tic Tac Toe game with a slight twist. In order to place your mark, you must first answer a randomly generated math problem.
+        You also only have 10 seconds to answer said question! If you answer 3 questions in a row, you get to go twice in a row. Good Luck!</string>
 </resources>
