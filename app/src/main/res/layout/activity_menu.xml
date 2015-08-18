@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/buttonsLayout"
+        android:layout_marginTop="10dp"
         android:textSize="60sp"
         android:gravity="center"
         android:textStyle="italic"
