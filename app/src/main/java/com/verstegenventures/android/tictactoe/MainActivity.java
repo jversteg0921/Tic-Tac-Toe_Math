@@ -1,7 +1,11 @@
 package com.verstegenventures.android.tictactoe;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -31,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private int ans;
     private View v;
     private int questionsRight = 0;
+    private int score = 0;
+    protected SQLiteDatabase db;
+    private String initials;
 
 
     //Create the initial game space
@@ -41,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         //Look at the right XML layout and remove the action bar
         setContentView(R.layout.activity_main);
 
+        Bundle b = getIntent().getExtras();
+        if(b != null){
+            initials = b.getString("INIT");
+        }
 
         //Set up a new board and AI and assign the initial variables
         board = new GameBoard();
@@ -49,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         resultText = (TextView) findViewById(R.id.answerText);
         questionText = (TextView) findViewById(R.id.problemText);
 
-
+        db = (new DatabaseHelper(this)).getWritableDatabase();
 
     }
 
@@ -182,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Increment move Count because a move was just made
                 moveCount++;
+                score += 10;
 
                 //Check to see if the game is over
                 isOver = checkEnd(mark);
@@ -191,18 +203,16 @@ public class MainActivity extends AppCompatActivity {
                     questionsRight++;
                     if (questionsRight == 3) {
                         Toast.makeText(this, "3 questions in a row, have another go!", Toast.LENGTH_LONG).show();
+                        score += 20;
                         questionsRight = 0;
-                    }
-                    else if(questionsRight > 3){
+                    } else if (questionsRight > 3) {
                         questionsRight = 0;
-                    }
-                    else if(questionsRight < 3) {
+                    } else if (questionsRight < 3) {
                         getAIMove(board);
                     }
-                }
+                }else restartOrQuit();
 
-            }
-            else{
+            }else{
                 questionsRight=0;
                 getAIMove(board);
             }
@@ -211,6 +221,31 @@ public class MainActivity extends AppCompatActivity {
         else{
             getAIMove(board);
         }
+    }
+
+    public void restartOrQuit(){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.continueQuit)
+                .setMessage("Would you like continue or quit?")
+                .setPositiveButton(R.string.continueYes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Start a new game
+                    }
+                })
+                .setNegativeButton(R.string.quitYes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ContentValues values = new ContentValues();
+                        values.put("playerInitials", initials);
+                        values.put("score", score);
+                        db.insert("scoretable",null, values);
+
+                        Intent intent = new Intent(MainActivity.this, HighscoresActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .show();
     }
 
     //Even for when the user changes between going first and going second
@@ -241,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
         if(board.isWinner()){
             announce(true, player);
             questionsRight=0;
+            if(player == this.mark){
+                score+=50;
+            }else score-=20;
             return true;
         }
 

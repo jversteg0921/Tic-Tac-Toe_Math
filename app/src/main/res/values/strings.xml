@@ -11,4 +11,7 @@
     <string name="aboutGame">This is a simple Tic Tac Toe game with a slight twist. In order to place your mark, you must first answer a randomly generated math problem.
         You also only have 10 seconds to answer said question! If you answer 3 questions in a row, you get to go twice! </string>
     <string name="goodLuck">Good Luck!</string>
+    <string name="continueQuit"> What would you like to do?</string>
+    <string name="continueYes">Continue</string>
+    <string name="quitYes">Quit</string>
 </resources>
