@@ -3,4 +3,6 @@
     <item name="questionBlue" type="color">#0066ff</item>
     <item name="menuBackgroundBlue" type="color">#003366</item>
     <item name="aboutBackgroundBlue" type="color">#66ccff</item>
+    <item name="topTenScore" type="color">#F15928</item>
+    <item name="highScoresBackground" type="color">#3503ff</item>
 </resources>

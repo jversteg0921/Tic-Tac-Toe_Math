@@ -1,7 +1,6 @@
 package com.verstegenventures.android.tictactoe;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         resultText = (TextView) findViewById(R.id.answerText);
         questionText = (TextView) findViewById(R.id.problemText);
 
-        db = (new DatabaseHelper(this)).getWritableDatabase();
+        db = (new scoresDbAdapter(this)).getWritableDatabase();
 
     }
 
@@ -236,10 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.quitYes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ContentValues values = new ContentValues();
-                        values.put("playerInitials", initials);
-                        values.put("score", score);
-                        db.insert("scoretable",null, values);
+                       //call createHighScores
 
                         Intent intent = new Intent(MainActivity.this, HighscoresActivity.class);
                         startActivity(intent);
