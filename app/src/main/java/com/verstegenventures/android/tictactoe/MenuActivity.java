@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 /**
  * Created by jfv059 on 8/17/2015.
  */
@@ -22,6 +24,7 @@ public class MenuActivity extends Activity{
     Button highScores;
     Button exitBtn;
     private String m_initials = "";
+    private ScoresDbAdapter mDbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -33,6 +36,15 @@ public class MenuActivity extends Activity{
         aboutBtn = (Button) findViewById(R.id.aboutButton);
         exitBtn = (Button) findViewById(R.id.exit);
         highScores = (Button) findViewById(R.id.highScores);
+
+        mDbAdapter = new ScoresDbAdapter(this);
+        try{
+            mDbAdapter.open();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
 
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,8 +95,8 @@ public class MenuActivity extends Activity{
             @Override
             public void onClick(View v) {
                 //Go to High Scores Activity
-                //Intent highScoresIntent = new Intent(MenuActivity.this, HighScoresActivity.class);
-                //startActivity(highScoresIntent);
+                Intent highScoresIntent = new Intent(MenuActivity.this, HighscoresActivity.class);
+                startActivity(highScoresIntent);
             }
         });
 
@@ -94,5 +106,17 @@ public class MenuActivity extends Activity{
                 finish();
             }
         });
+
+        insertSomeScores();
+        mDbAdapter.close();
+
+    }
+
+    private void insertSomeScores(){
+        mDbAdapter.createHighScore("JFV", 100);
+        mDbAdapter.createHighScore("JFV", 300);
+        mDbAdapter.createHighScore("KGA", 500);
+        mDbAdapter.createHighScore("JFV", 1000);
+
     }
 }

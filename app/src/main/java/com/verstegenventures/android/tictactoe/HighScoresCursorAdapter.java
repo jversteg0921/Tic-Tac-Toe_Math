@@ -27,12 +27,12 @@ public class HighScoresCursorAdapter extends SimpleCursorAdapter{
 
         ViewHolder holder = (ViewHolder) view.getTag();
         if(holder == null){
-            holder.colId = cursor.getColumnIndexOrThrow(scoresDbAdapter.COL_ID);
+            holder.colId = cursor.getColumnIndexOrThrow(ScoresDbAdapter.COL_SCORE);
             holder.listTab = view.findViewById(R.id.row_tab);
             view.setTag(holder);
         }
 
-        if(cursor.getInt(holder.colId) < 10){
+        if(cursor.getInt(holder.colId) > 500){
             holder.listTab.setBackgroundColor(context.getResources().getColor(R.color.topTenScore));
         }else{
             holder.listTab.setBackgroundColor(context.getResources().getColor(R.color.highScoresBackground));

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private View v;
     private int questionsRight = 0;
     private int score = 0;
-    protected SQLiteDatabase db;
+    private ScoresDbAdapter mScoresDbAdapter;
     private String initials;
 
 
@@ -59,7 +59,14 @@ public class MainActivity extends AppCompatActivity {
         resultText = (TextView) findViewById(R.id.answerText);
         questionText = (TextView) findViewById(R.id.problemText);
 
-        db = (new scoresDbAdapter(this)).getWritableDatabase();
+        mScoresDbAdapter = new ScoresDbAdapter(this);
+        try{
+            mScoresDbAdapter.open();
+        }catch(SQLException e ){
+            e.printStackTrace();
+        }
+
+
 
     }
 
@@ -126,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
             String strProb = x + " " + funcs[function] + " " + y;
             intent.putExtra("STRING_PROB", strProb);
             intent.putExtra("STRING_ANS",ans);
-            //startActivity(intent);
 
            startActivityForResult(intent, 1);
 
@@ -209,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (questionsRight < 3) {
                         getAIMove(board);
                     }
-                }else restartOrQuit();
+                }
 
             }else{
                 questionsRight=0;
@@ -230,12 +236,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Start a new game
+                        clear();
+
                     }
                 })
                 .setNegativeButton(R.string.quitYes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                        //call createHighScores
+                        mScoresDbAdapter.createHighScore(initials, score);
 
                         Intent intent = new Intent(MainActivity.this, HighscoresActivity.class);
                         startActivity(intent);
@@ -304,6 +313,8 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, player, Toast.LENGTH_LONG);
         toast.show();
+
+        restartOrQuit();
 
     }
 
