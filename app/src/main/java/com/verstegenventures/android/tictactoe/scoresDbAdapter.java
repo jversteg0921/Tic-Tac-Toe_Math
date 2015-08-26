@@ -15,7 +15,7 @@ public class scoresDbAdapter {
     //column names
     public static final String COL_ID = "_id";
     public static final String COL_INITIALS = "playerInitials";
-    public static final String COL_SCORE = "score";
+    public static final String COL_SCORE = "highScores";
 
     //corresponding indices
     public static final int INDEX_ID = 0;
@@ -25,14 +25,15 @@ public class scoresDbAdapter {
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
-    public static final String DATABASE_NAME = "highscores";
-    private static final String TABLE_NAME = "scoretable";
+    public static final String DATABASE_NAME = "high_scores";
+    private static final String TABLE_NAME = "score_table";
     private static final int DATABASE_VERSION = 1;
 
     private final Context mCtx;
 
     //SQL statement used to create the database
-    private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ( " +
+    private static final String DATABASE_CREATE =
+            "CREATE TABLE if not exists " + TABLE_NAME + " ( " +
             COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COL_INITIALS + " TEXT, " +
             COL_SCORE + " INTEGER);";
@@ -97,6 +98,14 @@ public class scoresDbAdapter {
         return mCursor;
     }
 
+    //Update
+    public void updateHighScore(HighScore highScore){
+        ContentValues values = new ContentValues();
+        values.put(COL_INITIALS, highScore.getInitials());
+        values.put(COL_SCORE,highScore.getScore());
+        mDb.update(TABLE_NAME,values,COL_ID + "=?", new String[]{String.valueOf(highScore.getId())});
+    }
+
     //Delete
     public void deleteHighScoreById(int nId) {
         mDb.delete(TABLE_NAME, COL_ID + "=?", new String[]{String.valueOf(nId)});
@@ -108,7 +117,7 @@ public class scoresDbAdapter {
     }
 
 
-    public static class DatabaseHelper extends SQLiteOpenHelper {
+    private static class DatabaseHelper extends SQLiteOpenHelper {
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -123,7 +132,11 @@ public class scoresDbAdapter {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             //not used
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(db);
         }
 
     }
+
+
 }
