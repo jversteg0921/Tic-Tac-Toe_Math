@@ -103,14 +103,23 @@ public class MainActivity extends AppCompatActivity {
             else if(function == 1){
                 x = rnd.nextInt(49) + 1;
                 y = rnd.nextInt(49) + 1;
+                while(x < y){
+                    y = rnd.nextInt(49) + 1;
+                }
             }
             else if(function == 2){
                 x = rnd.nextInt(24) + 1;
                 y = rnd.nextInt(9) + 1;
+                while(y == 1){
+                    y = rnd.nextInt(9) + 1;
+                }
             }
             else{
                 x = rnd.nextInt(49) + 1;
                 y = rnd.nextInt(24) + 1;
+                while(y == 1){
+                    y = rnd.nextInt(24) + 1;
+                }
             }
 
             if(function == 3) {
@@ -248,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(MainActivity.this, HighscoresActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 })
                 .show();
