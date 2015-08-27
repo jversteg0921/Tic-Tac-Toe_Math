@@ -9,11 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="48dp">
 
-        <view
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            class= "android.view.View"
-            android:id="@+id/row_tab"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="50dp"
@@ -24,13 +19,29 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Initals"
             android:id="@+id/initials_text"
+            android:fontFamily="serif"
+            android:textStyle="italic"
             android:textSize="18sp"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/holo_purple"/>
 
         <Space
-            android:layout_width="100dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Score"
+            android:id="@+id/scores_text"
+            android:textSize="22sp"
+            android:textColor="@android:color/white"/>
+
     </LinearLayout>
 
     <view

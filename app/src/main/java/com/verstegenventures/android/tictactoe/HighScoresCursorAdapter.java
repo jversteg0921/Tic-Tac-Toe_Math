@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 /**
  * Created by jfv059 on 8/26/2015.
@@ -25,24 +26,18 @@ public class HighScoresCursorAdapter extends SimpleCursorAdapter{
     public void bindView(View view, Context context, Cursor cursor){
         super.bindView(view, context, cursor);
 
-        ViewHolder holder = (ViewHolder) view.getTag();
-        if(holder == null){
-            holder.colId = cursor.getColumnIndexOrThrow(ScoresDbAdapter.COL_SCORE);
-            holder.listTab = view.findViewById(R.id.row_tab);
-            view.setTag(holder);
-        }
+//        ViewHolder holder = (ViewHolder) view.getTag();
+//        if(holder == null){
+//            holder = new ViewHolder();
+//            holder.listTab = (TextView) view.findViewById(R.id.row_tab);
+//            view.setTag(holder);
+//        }
 
-        if(cursor.getInt(holder.colId) > 500){
-            holder.listTab.setBackgroundColor(context.getResources().getColor(R.color.topTenScore));
-        }else{
-            holder.listTab.setBackgroundColor(context.getResources().getColor(R.color.highScoresBackground));
-        }
+
     }
 
     static class ViewHolder{
-        //store the column index
-        int colId;
         //store the view
-        View listTab;
+        TextView listTab;
     }
 }

@@ -5,6 +5,7 @@
               android:layout_width="match_parent"
               android:background="#3503ff"
               tools:context=".HighscoresActivity"
+              android:padding="16dp"
               android:layout_height="match_parent">
     <TextView
         android:layout_width="fill_parent"
@@ -15,10 +16,21 @@
         android:textSize="18sp"
         android:textColor="#fbb829"
         android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
     <ListView
         android:id="@+id/highScoresView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         tools:listitem = "@layout/scores_row"/>
+    </LinearLayout>
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:id="@+id/backToMenu"/>
 
 </LinearLayout>

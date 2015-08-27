@@ -3,6 +3,8 @@ package com.verstegenventures.android.tictactoe;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.sql.SQLException;
@@ -13,7 +15,8 @@ import java.sql.SQLException;
 public class HighscoresActivity extends Activity{
     private ListView scores;
     private HighScoresCursorAdapter mHighScoresCursorAdapter;
-    private ScoresDbAdapter mScoresDbAdapter;
+    private scoresDbAdapter mScoresDbAdapter;
+    Button backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -22,19 +25,34 @@ public class HighscoresActivity extends Activity{
         scores = (ListView) findViewById(R.id.highScoresView);
         scores.setDivider(null);
 
-        mScoresDbAdapter = new ScoresDbAdapter(this);
+        backBtn = (Button) findViewById(R.id.backToMenu);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mScoresDbAdapter = new scoresDbAdapter(this);
         try{
             mScoresDbAdapter.open();
-        }catch(SQLException e){
+        } catch(SQLException e){
             e.printStackTrace();
         }
 
+
+
+
         Cursor cursor = mScoresDbAdapter.fetchAllHighScores();
         String[] from = new String[]{
-                ScoresDbAdapter.COL_INITIALS
+
+                scoresDbAdapter.COL_INITIALS,
+                scoresDbAdapter.COL_SCORE
         };
         int[] to = new int[]{
-                R.id.initials_text
+                R.id.initials_text,
+                R.id.scores_text
         };
 
         mHighScoresCursorAdapter = new HighScoresCursorAdapter(
@@ -45,6 +63,7 @@ public class HighscoresActivity extends Activity{
                 to,
                 0
         );
+
 
 
         scores.setAdapter(mHighScoresCursorAdapter);

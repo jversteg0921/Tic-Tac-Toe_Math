@@ -5,14 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.sql.SQLException;
 
 /**
  * Created by jfv059 on 8/17/2015.
@@ -24,7 +24,6 @@ public class MenuActivity extends Activity{
     Button highScores;
     Button exitBtn;
     private String m_initials = "";
-    private ScoresDbAdapter mDbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -37,12 +36,7 @@ public class MenuActivity extends Activity{
         exitBtn = (Button) findViewById(R.id.exit);
         highScores = (Button) findViewById(R.id.highScores);
 
-        mDbAdapter = new ScoresDbAdapter(this);
-        try{
-            mDbAdapter.open();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+
 
 
 
@@ -56,7 +50,12 @@ public class MenuActivity extends Activity{
                 final EditText input = new EditText(MenuActivity.this);
                 //Specify the type of input expected
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
+                input.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+
                 builder.setView(input);
+
+
+
 
                 //set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -78,7 +77,11 @@ public class MenuActivity extends Activity{
                         dialog.cancel();
                     }
                 });
-                builder.show();
+
+                AlertDialog dialog = builder.create();
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                dialog.show();
+
             }
         });
 
@@ -107,16 +110,8 @@ public class MenuActivity extends Activity{
             }
         });
 
-        insertSomeScores();
-        mDbAdapter.close();
+
 
     }
 
-    private void insertSomeScores(){
-        mDbAdapter.createHighScore("JFV", 100);
-        mDbAdapter.createHighScore("JFV", 300);
-        mDbAdapter.createHighScore("KGA", 500);
-        mDbAdapter.createHighScore("JFV", 1000);
-
-    }
 }

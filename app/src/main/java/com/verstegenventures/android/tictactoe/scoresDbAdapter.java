@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.sql.SQLException;
 
@@ -22,6 +23,9 @@ public class scoresDbAdapter {
     public static final int INDEX_INITIALS = INDEX_ID + 1;
     public static final int INDEX_SCORE = INDEX_ID + 2;
 
+    //used for logging
+    private static final String TAG = "highscoresAdapter";
+
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
@@ -34,7 +38,7 @@ public class scoresDbAdapter {
     //SQL statement used to create the database
     private static final String DATABASE_CREATE =
             "CREATE TABLE if not exists " + TABLE_NAME + " ( " +
-            COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_ID + " INTEGER PRIMARY KEY autoincrement, " +
             COL_INITIALS + " TEXT, " +
             COL_SCORE + " INTEGER);";
 
@@ -58,16 +62,18 @@ public class scoresDbAdapter {
     //id will be created automatically
     public void createHighScore(String initials, int score) {
         ContentValues values = new ContentValues();
-        values.put(COL_INITIALS, initials);
         values.put(COL_SCORE, score);
+        values.put(COL_INITIALS, initials);
+
         mDb.insert(TABLE_NAME, null, values);
     }
 
     //Overloaded to take a highscore
     public long createHighScore(HighScore highScore) {
         ContentValues values = new ContentValues();
-        values.put(COL_INITIALS, highScore.getInitials());
         values.put(COL_SCORE, highScore.getScore());
+        values.put(COL_INITIALS, highScore.getInitials());
+
 
         //Inserting row
         return mDb.insert(TABLE_NAME, null, values);
@@ -77,7 +83,7 @@ public class scoresDbAdapter {
     public HighScore fetchHighScoreById(int id) {
         Cursor cursor = mDb.query(TABLE_NAME, new String[]{
                         COL_INITIALS, COL_SCORE}, COL_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
+                new String[]{String.valueOf(id)}, null, null, null, COL_SCORE + " DESC");
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -91,7 +97,7 @@ public class scoresDbAdapter {
 
         Cursor mCursor = mDb.query(TABLE_NAME, new String[]{
                         COL_ID, COL_INITIALS, COL_SCORE},
-                null, null, null, null, null);
+                null, null, null, null, COL_SCORE + " DESC", "10" );
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -125,13 +131,14 @@ public class scoresDbAdapter {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
+            Log.w(TAG, DATABASE_CREATE);
             db.execSQL(DATABASE_CREATE);
         }
 
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            //not used
+            Log.w(TAG, "Upgrading from version " + oldVersion + " to " + newVersion);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
         }

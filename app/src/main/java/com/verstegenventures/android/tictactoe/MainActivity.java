@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private View v;
     private int questionsRight = 0;
     private int score = 0;
-    private ScoresDbAdapter mScoresDbAdapter;
+    private scoresDbAdapter mScoresDbAdapter;
     private String initials;
 
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         resultText = (TextView) findViewById(R.id.answerText);
         questionText = (TextView) findViewById(R.id.problemText);
 
-        mScoresDbAdapter = new ScoresDbAdapter(this);
+        mScoresDbAdapter = new scoresDbAdapter(this);
         try{
             mScoresDbAdapter.open();
         }catch(SQLException e ){
