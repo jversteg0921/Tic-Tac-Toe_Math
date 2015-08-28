@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private Random rnd;
     int x;
     int y;
-    String[] funcs = {"+", "-", "*", "/"};
-    Button submitBtn;
     TextView resultText;
     TextView questionText;
+    TextView initialsDisplay;
+    TextView scoreDisplay;
     boolean correct = false;
     private int ans;
     private View v;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private int score = 0;
     private scoresDbAdapter mScoresDbAdapter;
     private String initials;
+    final ArrayList selectedItems = new ArrayList();
+    final CharSequence[] items = {"+", "-", "*", "/"};
 
 
     //Create the initial game space
@@ -47,10 +50,56 @@ public class MainActivity extends AppCompatActivity {
         //Look at the right XML layout and remove the action bar
         setContentView(R.layout.activity_main);
 
+
         Bundle b = getIntent().getExtras();
-        if(b != null){
+        if (b != null) {
             initials = b.getString("INIT");
         }
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select the Functions:");
+        builder.setIcon(android.R.drawable.checkbox_on_background);
+        builder.setMultiChoiceItems(items, null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int indexSelected,
+                                        boolean isChecked) {
+                        if (isChecked) {
+                            //If user checked the item, add it to selected list
+                            selectedItems.add(items[indexSelected]);
+                        } else if (selectedItems.contains(items[indexSelected])) {
+                            selectedItems.remove(items[indexSelected]);
+                        }
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (selectedItems.isEmpty()) {
+                            Toast.makeText(MainActivity.this, "You must select at least one function", Toast.LENGTH_LONG).show();
+                            builder.show();
+
+
+                        }
+
+
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        builder.show();
+
+        initialsDisplay = (TextView) findViewById(R.id.initials_display);
+        initialsDisplay.setText(initials);
+
+        scoreDisplay = (TextView) findViewById(R.id.score_display);
+        scoreDisplay.setText(score + "");
+
 
         //Set up a new board and AI and assign the initial variables
         board = new GameBoard();
@@ -82,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
     //Action when reset is clicked which clears the screen and the virtual game board
     public void resetClick(View v){
         clear();
+        score=0;
+        scoreDisplay.setText(score + "");
         if(aiMark.equals("X")) getAIMove(board);
     }
 
@@ -95,51 +146,51 @@ public class MainActivity extends AppCompatActivity {
         String content = (String) cell.getText();
         if(content.equals("") && !isOver) {
 
-            int function = rnd.nextInt(4);
-            if(function == 0){
+            int function = rnd.nextInt(selectedItems.size());
+            if(selectedItems.get(function) == "+"){
                 x = rnd.nextInt(49) + 1;
                 y = rnd.nextInt(49) + 1;
             }
-            else if(function == 1){
+            else if(selectedItems.get(function) == "-"){
                 x = rnd.nextInt(49) + 1;
                 y = rnd.nextInt(49) + 1;
                 while(x < y){
                     y = rnd.nextInt(49) + 1;
                 }
             }
-            else if(function == 2){
-                x = rnd.nextInt(24) + 1;
-                y = rnd.nextInt(9) + 1;
+            else if(selectedItems.get(function) == "*"){
+                x = rnd.nextInt(11) + 1;
+                y = rnd.nextInt(11) + 1;
                 while(y == 1){
                     y = rnd.nextInt(9) + 1;
                 }
             }
             else{
                 x = rnd.nextInt(49) + 1;
-                y = rnd.nextInt(24) + 1;
+                y = rnd.nextInt(11) + 1;
                 while(y == 1){
-                    y = rnd.nextInt(24) + 1;
+                    y = rnd.nextInt(11) + 1;
                 }
             }
 
-            if(function == 3) {
+            if(selectedItems.get(function) == "/") {
                 while ((x % y) != 0) {
-                    y = rnd.nextInt(14) + 1;
+                    y = rnd.nextInt(11) + 1;
                 }
             }
 
-            if (function == 0) {
+            if (selectedItems.get(function) == "+") {
                 ans = x + y;
-            } else if (function == 1) {
+            } else if (selectedItems.get(function) == "-") {
                 ans = x - y;
-            } else if (function == 2) {
+            } else if (selectedItems.get(function) == "*") {
                 ans = x * y;
             } else {
                 ans = x / y;
             }
 
             Intent intent = new Intent(this,Questions.class);
-            String strProb = x + " " + funcs[function] + " " + y;
+            String strProb = x + " " + selectedItems.get(function) + " " + y;
             intent.putExtra("STRING_PROB", strProb);
             intent.putExtra("STRING_ANS",ans);
 
@@ -208,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
                 //Increment move Count because a move was just made
                 moveCount++;
                 score += 10;
+                scoreDisplay.setText(score + "");
 
                 //Check to see if the game is over
                 isOver = checkEnd(mark);
@@ -218,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
                     if (questionsRight == 3) {
                         Toast.makeText(this, "3 questions in a row, have another go!", Toast.LENGTH_LONG).show();
                         score += 20;
+                        scoreDisplay.setText(score + "");
                         questionsRight = 0;
                     } else if (questionsRight > 3) {
                         questionsRight = 0;
@@ -255,9 +308,10 @@ public class MainActivity extends AppCompatActivity {
                        //call createHighScores
                         mScoresDbAdapter.createHighScore(initials, score);
 
+                        finish();
+
                         Intent intent = new Intent(MainActivity.this, HighscoresActivity.class);
                         startActivity(intent);
-                        finish();
                     }
                 })
                 .show();
@@ -293,7 +347,9 @@ public class MainActivity extends AppCompatActivity {
             questionsRight=0;
             if(player == this.mark){
                 score+=50;
+                scoreDisplay.setText(score + "");
             }else score-=20;
+            scoreDisplay.setText(score + "");
             return true;
         }
 

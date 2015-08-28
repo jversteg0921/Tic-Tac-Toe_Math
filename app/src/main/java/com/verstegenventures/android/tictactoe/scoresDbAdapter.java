@@ -117,6 +117,13 @@ public class scoresDbAdapter {
         mDb.delete(TABLE_NAME, COL_ID + "=?", new String[]{String.valueOf(nId)});
     }
 
+    public void deleteAllButTopTen(){
+
+        mDb.execSQL("Delete From " + TABLE_NAME + "  where " +
+                COL_ID + " not in (Select " + COL_ID +
+                " from " + TABLE_NAME + " order by " + COL_SCORE + " DESC limit 10)");
+    }
+
     //Delete all
     public void deleteAllHighScores() {
         mDb.delete(TABLE_NAME, null, null);

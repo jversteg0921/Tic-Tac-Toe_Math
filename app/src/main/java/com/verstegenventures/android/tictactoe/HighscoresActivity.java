@@ -1,8 +1,10 @@
 package com.verstegenventures.android.tictactoe;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -12,7 +14,7 @@ import java.sql.SQLException;
 /**
  * Created by jfv059 on 8/25/2015.
  */
-public class HighscoresActivity extends Activity{
+public class HighscoresActivity extends AppCompatActivity{
     private ListView scores;
     private HighScoresCursorAdapter mHighScoresCursorAdapter;
     private scoresDbAdapter mScoresDbAdapter;
@@ -30,6 +32,7 @@ public class HighscoresActivity extends Activity{
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 finish();
             }
         });
@@ -41,6 +44,7 @@ public class HighscoresActivity extends Activity{
             e.printStackTrace();
         }
 
+        mScoresDbAdapter.deleteAllButTopTen();
 
 
 

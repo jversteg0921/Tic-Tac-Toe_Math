@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -52,12 +53,12 @@ public class MenuActivity extends Activity{
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
-                builder.setTitle("Enter Initials");
+                builder.setTitle("Enter Initials:");
                 //set up the input
                 final EditText input = new EditText(MenuActivity.this);
                 //Specify the type of input expected
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
-                input.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+                input.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
                 builder.setView(input);
 
@@ -73,7 +74,6 @@ public class MenuActivity extends Activity{
                             Intent mainIntent = new Intent(MenuActivity.this, MainActivity.class);
                             mainIntent.putExtra("INIT", m_initials);
                             startActivity(mainIntent);
-                            finish();
                         } else
                             (Toast.makeText(MenuActivity.this, "Please enter initials!", Toast.LENGTH_LONG)).show();
                     }
@@ -86,6 +86,7 @@ public class MenuActivity extends Activity{
                 });
 
                 AlertDialog dialog = builder.create();
+                dialog.setIcon(android.R.drawable.ic_menu_edit);
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                 dialog.show();
 

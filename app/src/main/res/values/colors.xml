@@ -5,4 +5,5 @@
     <item name="aboutBackgroundBlue" type="color">#66ccff</item>
     <item name="topTenScore" type="color">#F15928</item>
     <item name="highScoresBackground" type="color">#3503ff</item>
+    <item name="textColor" type="color">#ffffff</item>
 </resources>
